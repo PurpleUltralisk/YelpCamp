@@ -6,6 +6,10 @@ Thank you Colt for being a wonderful teacher.
 ### App Features
 
 - EJS and EJS-Mate Templating
-- Bootstrap
-- RESTful CRUD operations
+- Bootstrap Styling
+- RESTful routes
+- MongoDB CRUD operations
+- Simple client-side validation
+- Schema validation using `Joi` package
+- Error Handling
 - User Authentication
