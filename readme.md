@@ -12,4 +12,5 @@ Thank you Colt for being a wonderful teacher.
 - Simple client-side validation
 - Schema validation using `Joi` package
 - Error Handling
+- Express middleware and Mongoose middleware
 - User Authentication
