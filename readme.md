@@ -15,3 +15,4 @@ Thank you Colt for being a wonderful teacher.
 - Express middleware and Mongoose middleware
 - Flash messaging using `connect-flash`
 - User Authentication using `Passport.js`
+- Image upload to `Cloudinary` using `multer`
