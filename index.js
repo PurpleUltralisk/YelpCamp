@@ -16,12 +16,14 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoDBStore = require('connect-mongo');
 
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
-mongoose.connect('mongodb://localhost:27017/YelpCamp', {
+const dbURL = 'mongodb://localhost:27017/YelpCamp';
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -41,6 +43,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
+
 app.use(helmet());
 
 const scriptSrcUrls = [
@@ -58,6 +61,7 @@ const styleSrcUrls = [
     "https://api.tiles.mapbox.com",
     "https://fonts.googleapis.com",
     "https://use.fontawesome.com",
+    "https://cdn.jsdelivr.net"
 ];
 const connectSrcUrls = [
     "https://api.mapbox.com",
@@ -67,8 +71,8 @@ const connectSrcUrls = [
 const fontSrcUrls = [];
 app.use(
     helmet.contentSecurityPolicy({
+        useDefaults: true,
         directives: {
-            defaultSrc: [],
             connectSrc: ["'self'", ...connectSrcUrls],
             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
@@ -81,13 +85,18 @@ app.use(
                 "data:",
                 `https://res.cloudinary.com/${process.env.CLOUD_NAME}/`, //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 "https://images.unsplash.com",
+                "https://source.unsplash.com",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
         },
     })
 );
 
+// Config to use Mongo for session storage
 const sessionConfig = {
+    store: MongoDBStore.create({
+        mongoUrl: dbURL
+    }),
     name: 'yelpCampid',
     secret:'testSecret',
     resave: false, 
