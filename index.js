@@ -22,7 +22,7 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
-const dbURL = 'mongodb://localhost:27017/YelpCamp';
+const dbURL = process.env.DB_URL || 'mongodb://localhost:27017/YelpCamp';
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -92,13 +92,16 @@ app.use(
     })
 );
 
+const secret = process.env.SECRET || 'testSecret';
 // Config to use Mongo for session storage
 const sessionConfig = {
     store: MongoDBStore.create({
-        mongoUrl: dbURL
+        mongoUrl: dbURL,
+        secret: secret,
+        touchAfter: 24*60*60 // in seconds
     }),
     name: 'yelpCampid',
-    secret:'testSecret',
+    secret:secret,
     resave: false, 
     saveUninitialized: true,
     cookie:{
@@ -144,6 +147,7 @@ app.use((err, req, res, next)=>{
     res.status(statusCode).render('error', {err});
 })
 
-app.listen(3000, () => {
-    console.log('Server started on 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server started on ${port}`);
 })
