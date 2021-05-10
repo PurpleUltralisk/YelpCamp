@@ -30,3 +30,4 @@ Thank you Colt for being a wonderful teacher.
 - User Authentication using `Passport.js`
 - Image upload to `Cloudinary` using `multer`
 - Geocoded maps using `Mapbox`
+- Security configuration for `helmet`
